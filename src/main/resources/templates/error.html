@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<!-- Shown by GlobalExceptionHandler and by Spring for 404 / 500 pages -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Error')}"></head>
+<body>
+<div class="error-box">
+    <h1 th:text="${errorTitle} ?: 'Page not available'">Page not available</h1>
+    <p class="muted" th:text="${errorMessage} ?: 'The page you asked for could not be opened.'">message</p>
+    <p><a class="btn" th:href="@{/}">Back to dashboard</a></p>
+</div>
+</body>
+</html>

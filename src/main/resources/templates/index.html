@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1>Placement Dashboard</h1>
+                <p>Snapshot of the 2026 batch - students, recruiters and the running drives</p>
+            </div>
+            <div class="topbar-actions" th:if="${session.user.staff}">
+                <a class="btn btn-ghost" th:href="@{/drives/new}">Announce drive</a>
+                <a class="btn" th:href="@{/applications/new}">New application</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <!-- summary tiles: every number comes from the ReportService -->
+            <div class="stat-row">
+                <div class="stat">
+                    <div class="stat-label">Registered students</div>
+                    <div class="stat-value" th:text="${stats.totalStudents()}">0</div>
+                    <div class="stat-note" th:text="${stats.unplacedStudents()} + ' yet to be placed'">-</div>
+                </div>
+                <div class="stat green">
+                    <div class="stat-label">Students placed</div>
+                    <div class="stat-value" th:text="${stats.placedStudents()}">0</div>
+                    <div class="stat-note" th:text="${stats.placementPercentage()} + '% of the batch'">-</div>
+                </div>
+                <div class="stat slate">
+                    <div class="stat-label">Recruiters</div>
+                    <div class="stat-value" th:text="${stats.totalCompanies()}">0</div>
+                    <div class="stat-note">Companies on record</div>
+                </div>
+                <div class="stat amber">
+                    <div class="stat-label">Open drives</div>
+                    <div class="stat-value" th:text="${stats.openDrives()}">0</div>
+                    <div class="stat-note">Accepting applications now</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Applications</div>
+                    <div class="stat-value" th:text="${stats.totalApplications()}">0</div>
+                    <div class="stat-note">Across all drives</div>
+                </div>
+                <div class="stat green">
+                    <div class="stat-label">Highest package</div>
+                    <div class="stat-value" th:text="${stats.highestPackage()} + ' LPA'">0</div>
+                    <div class="stat-note" th:text="'Average ' + ${stats.averagePackage()} + ' LPA'">-</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- ------------------------------------ latest applications -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Latest applications</h2>
+                        <a class="small" th:href="@{/applications}">View all</a>
+                    </div>
+                    <div class="card-body tight">
+                        <div class="table-wrap">
+                            <table class="data">
+                                <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Drive</th>
+                                    <th>Applied on</th>
+                                    <th>Stage</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="app : ${recentApplications}">
+                                    <td>
+                                        <a class="row-title" th:href="@{'/students/' + ${app.student.id}}"
+                                           th:text="${app.student.fullName}">Student</a>
+                                        <div class="row-sub" th:text="${app.student.rollNumber}">Roll</div>
+                                    </td>
+                                    <td>
+                                        <div th:text="${app.drive.company.name}">Company</div>
+                                        <div class="row-sub" th:text="${app.drive.jobRole}">Role</div>
+                                    </td>
+                                    <td th:text="${app.appliedOnDisplay}">date</td>
+                                    <td>
+                                        <span class="pill"
+                                              th:classappend="'pill-' + ${app.status.name().toLowerCase()}"
+                                              th:text="${app.status.label}">status</span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(recentApplications)}">
+                                    <td colspan="4" class="empty">No applications have been recorded yet.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ------------------------------- branch wise placement bars -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Branch wise placement</h2>
+                        <span class="hint">selected / total</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="bar-row" th:each="row : ${departmentStats}">
+                            <span class="bar-key" th:text="${row.departmentCode()}">CSE</span>
+                            <span class="bar-track">
+                                <span class="bar-fill green"
+                                      th:style="'width:' + ${row.placementPercentage()} + '%'"></span>
+                            </span>
+                            <span class="bar-value"
+                                  th:text="${row.placedStudents()} + '/' + ${row.totalStudents()}">0/0</span>
+                        </div>
+                        <p class="small muted" th:if="${#lists.isEmpty(departmentStats)}">
+                            No departments have been added.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ------------------------------------------- upcoming drives -->
+            <div class="card">
+                <div class="card-head">
+                    <h2>Drives lined up</h2>
+                    <a class="small" th:href="@{/drives}">Manage drives</a>
+                </div>
+                <div class="card-body tight">
+                    <div class="table-wrap">
+                        <table class="data">
+                            <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Role</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th class="num">Package</th>
+                                <th class="num">Min CGPA</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="drive : ${upcomingDrives}">
+                                <td>
+                                    <a class="row-title" th:href="@{'/drives/' + ${drive.id}}"
+                                       th:text="${drive.company.name}">Company</a>
+                                </td>
+                                <td th:text="${drive.jobRole}">Role</td>
+                                <td th:text="${drive.driveDateDisplay}">date</td>
+                                <td th:text="${drive.location}">city</td>
+                                <td class="num" th:text="${drive.packageLpa} + ' LPA'">0</td>
+                                <td class="num" th:text="${drive.minCgpa}">0</td>
+                                <td>
+                                    <span class="pill" th:classappend="'pill-' + ${drive.status.name().toLowerCase()}"
+                                          th:text="${drive.status.label}">status</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(upcomingDrives)}">
+                                <td colspan="7" class="empty">No drive is scheduled after today.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

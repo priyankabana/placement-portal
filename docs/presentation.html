@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Placement Management System - Presentation</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #26303d; font-size: 13px; }
+  .slide { width: 297mm; height: 209mm; padding: 15mm 18mm; page-break-after: always; position: relative; overflow: hidden; background: #fff; }
+  .slide:last-child { page-break-after: auto; }
+  .kicker { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #7c8899; }
+  h1 { font-size: 34px; margin: 6px 0 10px; color: #16233a; line-height: 1.15; }
+  h2 { font-size: 23px; margin: 2px 0 14px; color: #16233a; }
+  h3 { font-size: 14px; margin: 14px 0 6px; color: #1f5c9e; text-transform: uppercase; letter-spacing: 0.6px; }
+  p { line-height: 1.55; margin: 0 0 9px; }
+  ul { margin: 0 0 9px; padding-left: 18px; }
+  li { margin-bottom: 5px; line-height: 1.5; }
+  .rule { height: 3px; width: 62px; background: #1f5c9e; margin: 12px 0 16px; }
+  .cols { display: flex; gap: 20px; }
+  .cols > div { flex: 1; min-width: 0; }
+  .box { border: 1px solid #dde3ea; border-radius: 5px; padding: 12px 14px; background: #fafbfc; }
+  .box.accent { border-left: 3px solid #1f5c9e; }
+  table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  th { text-align: left; background: #eef2f6; color: #46536a; padding: 6px 8px; border: 1px solid #dde3ea; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 6px 8px; border: 1px solid #e6ebf1; vertical-align: top; }
+  pre { background: #16233a; color: #dde6f2; padding: 11px 13px; border-radius: 4px; font-size: 10.5px; line-height: 1.45; overflow: hidden; font-family: Menlo, Consolas, monospace; margin: 0 0 10px; }
+  pre.light { background: #f5f7fa; color: #26303d; border: 1px solid #e0e6ed; }
+  code { font-family: Menlo, Consolas, monospace; font-size: 11.5px; background: #f0f3f7; padding: 1px 4px; border-radius: 3px; }
+  .tiles { display: flex; gap: 12px; margin: 12px 0; }
+  .tile { flex: 1; border: 1px solid #dde3ea; border-top: 3px solid #1f5c9e; border-radius: 5px; padding: 10px 12px; }
+  .tile .n { font-size: 22px; font-weight: 600; color: #16233a; }
+  .tile .l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #7c8899; }
+  .shot { width: 100%; border: 1px solid #d5dde6; border-radius: 4px; }
+  .foot { position: absolute; bottom: 8mm; left: 18mm; right: 18mm; display: flex; justify-content: space-between; font-size: 9.5px; color: #93a0b0; border-top: 1px solid #e6ebf1; padding-top: 5px; }
+  .cover { background: #16233a; color: #fff; display: flex; flex-direction: column; justify-content: center; }
+  .cover h1 { color: #fff; font-size: 46px; max-width: 78%; }
+  .cover .kicker { color: #8fa3c0; }
+  .cover .meta { margin-top: 26px; display: flex; gap: 40px; font-size: 12px; color: #b8c6d9; }
+  .cover .meta b { display: block; color: #fff; font-size: 14px; margin-bottom: 3px; font-weight: 600; }
+  .agenda li { font-size: 14px; margin-bottom: 9px; }
+</style>
+</head>
+<body>
+
+<!-- ============================== 1. cover ============================== -->
+<section class="slide cover">
+  <div class="kicker">Advanced Java · Spring Boot Mini Project</div>
+  <h1>Student Placement Management System</h1>
+  <p style="color:#c3d0e2; max-width:70%; font-size:15px;">
+    A web portal that replaces the registers of a college placement cell - student records,
+    visiting recruiters, campus drives, applications and the final placement report.
+  </p>
+  <div class="meta">
+    <div><b>Java 17 · Spring Boot 3.3</b>Spring MVC, Spring Data JPA</div>
+    <div><b>Thymeleaf + CSS</b>Server rendered multi page UI</div>
+    <div><b>5 tables in 3NF</b>H2 in memory, MySQL ready</div>
+    <div><b>Waterfall model</b>Six phases, one deliverable each</div>
+  </div>
+</section>
+
+<!-- ============================== 2. agenda ============================= -->
+<section class="slide">
+  <div class="kicker">Contents</div>
+  <h2>What this presentation covers</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <ol class="agenda">
+        <li><b>Introduction</b> - problem, objective, scope and users</li>
+        <li><b>Technology and architecture</b> - layers and request flow</li>
+        <li><b>Waterfall model</b> - how the project was built</li>
+        <li><b>Coding</b> - entity, repository, service, controller, view</li>
+        <li><b>Screens</b> - dashboard, CRUD pages, reports</li>
+        <li><b>Database description</b> - ER design, normalisation, joins</li>
+        <li><b>Testing, results and future scope</b></li>
+      </ol>
+    </div>
+    <div>
+      <div class="box accent">
+        <h3 style="margin-top:0">Project at a glance</h3>
+        <table>
+          <tr><td>Modules</td><td>Students, Companies, Drives, Applications, Reports</td></tr>
+          <tr><td>Java classes</td><td>26 (entity, repository, service, controller, DTO, exception)</td></tr>
+          <tr><td>Pages</td><td>16 Thymeleaf templates, 12 screens</td></tr>
+          <tr><td>Tables</td><td>department, company, student, drive, application</td></tr>
+          <tr><td>CRUD</td><td>Full create / read / update / delete on 4 entities</td></tr>
+          <tr><td>Tests</td><td>5 JUnit tests, all passing</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Student Placement Management System</span><span>Contents</span></div>
+</section>
+
+<!-- ========================== 3. introduction ========================== -->
+<section class="slide">
+  <div class="kicker">1. Introduction</div>
+  <h2>Problem, objective and scope</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>The problem today</h3>
+      <ul>
+        <li>Student details, company visits and results are kept in separate Excel sheets and registers.</li>
+        <li>Eligibility for a drive (CGPA and backlog cut off) is checked by hand for every student.</li>
+        <li>The same student sometimes gets entered twice for one company.</li>
+        <li>Branch wise placement percentage has to be counted manually at the end of the season.</li>
+      </ul>
+      <h3>Objective</h3>
+      <ul>
+        <li>One portal where the placement officer manages students, recruiters and drives.</li>
+        <li>Eligibility and duplicate checks done by the system, not by the officer.</li>
+        <li>Every application tracked through Applied → Shortlisted → Selected / Rejected.</li>
+        <li>Reports generated the moment the page is opened.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Scope of this build</h3>
+      <ul>
+        <li>CRUD screens for students, companies, drives and applications.</li>
+        <li>Search and filter on the list pages, drive status life cycle.</li>
+        <li>Automatic eligible student list for every drive.</li>
+        <li>Dashboard and report page with placement statistics.</li>
+      </ul>
+      <h3>Users of the system</h3>
+      <table>
+        <tr><th>Role</th><th>Responsibility</th></tr>
+        <tr><td>Placement Officer</td><td>Master data - students, recruiters, drives; opens and closes a drive</td></tr>
+        <tr><td>Placement Coordinator</td><td>Enters applications, updates the interview stage and remarks</td></tr>
+        <tr><td>Student (future scope)</td><td>Read only view of own profile and eligible drives</td></tr>
+      </table>
+      <div class="box" style="margin-top:12px">
+        <b>Out of scope</b> - login and role based access, resume file upload and email alerts.
+        These are listed as future scope on the last slide.
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Introduction</span><span>Slide 3</span></div>
+</section>
+
+<!-- ========================= 4. architecture =========================== -->
+<section class="slide">
+  <div class="kicker">2. System design</div>
+  <h2>Layered architecture</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div style="flex:1.15">
+<pre>          BROWSER  (placement officer)
+                |  HTTP  GET / POST form
+                v
+  +--------------------------------------------+
+  |  PRESENTATION - Thymeleaf templates, CSS   |
+  +--------------------------------------------+
+                |  model attributes  ^  HTML
+                v                    |
+  +--------------------------------------------+
+  |  CONTROLLER  @Controller                   |
+  |  reads the form, runs @Valid, picks a page  |
+  +--------------------------------------------+
+                |  one service call
+                v
+  +--------------------------------------------+
+  |  SERVICE  @Service @Transactional          |
+  |  college rules: duplicate, eligibility     |
+  +--------------------------------------------+
+                |  repository method
+                v
+  +--------------------------------------------+
+  |  REPOSITORY  Spring Data JPA interfaces    |
+  |  derived queries + JPQL -> SQL by Hibernate |
+  +--------------------------------------------+
+                |  JDBC
+                v
+  +--------------------------------------------+
+  |  DATABASE  5 tables                        |
+  +--------------------------------------------+</pre>
+    </div>
+    <div>
+      <h3>Rules kept while coding</h3>
+      <ul>
+        <li>A controller never calls a repository directly.</li>
+        <li>A service never reads the request and never returns HTML.</li>
+        <li>Only the entity classes know table and column names.</li>
+      </ul>
+      <h3>Flow of one real action - saving a student</h3>
+      <pre class="light">POST /students/save
+ 1  StringToDepartmentConverter: "1" -> Department
+ 2  @Valid checks the Student annotations
+    errors -> back to students/form with messages
+ 3  StudentService.create()
+      checkRollNumberIsFree()
+      checkEmailIsFree()
+      studentRepository.save()
+ 4  Hibernate: insert into student (...) values (...)
+ 5  flash message + redirect to /students/{id}
+    (redirect after POST, so refresh cannot
+     insert the same student twice)</pre>
+    </div>
+  </div>
+  <div class="foot"><span>System design</span><span>Slide 4</span></div>
+</section>
+
+<!-- ========================== 5. waterfall ============================= -->
+<section class="slide">
+  <div class="kicker">3. Software process</div>
+  <h2>Waterfall model followed</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+<pre class="light">  +---------------------------+
+  | 1. REQUIREMENT GATHERING  |  what the cell records today
+  +------------+--------------+
+               v
+      +---------------------------+
+      | 2. SYSTEM DESIGN          |  ER in 3NF, layers, pages
+      +------------+--------------+
+                   v
+          +---------------------------+
+          | 3. IMPLEMENTATION         |  module by module
+          +------------+--------------+
+                       v
+              +---------------------------+
+              | 4. TESTING                |  JUnit + manual
+              +------------+--------------+
+                           v
+                  +---------------------------+
+                  | 5. DEPLOYMENT             |  runnable jar
+                  +------------+--------------+
+                               v
+                      +---------------------------+
+                      | 6. MAINTENANCE            |  docs, data
+                      +---------------------------+</pre>
+      <div class="box">
+        <b>Why waterfall suits this project</b> - the working of a placement cell is fixed and
+        fully known before coding, so each phase could be completed and signed off before the
+        next one started.
+      </div>
+    </div>
+    <div>
+      <table>
+        <tr><th>Phase</th><th>Deliverable</th></tr>
+        <tr><td><b>Requirement</b></td><td>Module list, actors, 12 screens, report list</td></tr>
+        <tr><td><b>Design</b></td><td>5 table ER design in 3NF, layered packages, URL plan</td></tr>
+        <tr><td><b>Implementation</b></td><td>26 Java classes, 16 templates - student, company, drive, application, reports</td></tr>
+        <tr><td><b>Testing</b></td><td>5 JUnit tests + manual test of every CRUD path</td></tr>
+        <tr><td><b>Deployment</b></td><td><code>mvn clean package</code> → <code>placement-portal.jar</code> with embedded Tomcat</td></tr>
+        <tr><td><b>Maintenance</b></td><td>Sample data, documentation, screenshots, future scope</td></tr>
+      </table>
+      <h3>Team responsibility</h3>
+      <table>
+        <tr><th>Member</th><th>Owned work</th></tr>
+        <tr><td>1</td><td>Database design, entities, repositories</td></tr>
+        <tr><td>2</td><td>Service layer rules, exceptions, JUnit tests</td></tr>
+        <tr><td>3</td><td>Controllers, form binding, validation</td></tr>
+        <tr><td>4</td><td>Thymeleaf pages, CSS, documentation</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>Waterfall model</span><span>Slide 5</span></div>
+</section>
+
+<!-- =========================== 6. coding I ============================= -->
+<section class="slide">
+  <div class="kicker">4. Coding</div>
+  <h2>Entity and repository layer</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>Entity - Student mapped to a table</h3>
+<pre>@Entity
+@Table(name = "student", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_student_roll",
+                      columnNames = "roll_number") })
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Roll number is required")
+    @Column(name = "roll_number", nullable = false)
+    private String rollNumber;
+
+    @NotNull @DecimalMax(value = "10.0",
+        message = "CGPA cannot be more than 10")
+    private Double cgpa;
+
+    // many students belong to one branch
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
+    @OneToMany(mappedBy = "student",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private List&lt;Application&gt; applications = new ArrayList&lt;&gt;();</pre>
+    </div>
+    <div>
+      <h3>Repository - no SQL written by hand</h3>
+<pre>public interface StudentRepository
+        extends JpaRepository&lt;Student, Long&gt; {
+
+    // method name itself becomes the where clause
+    boolean existsByRollNumberIgnoreCase(String roll);
+    List&lt;Student&gt; findAllByOrderByRollNumberAsc();
+
+    // students who clear the cut off of a drive
+    // and have not applied to it yet
+    @Query("""
+        select s from Student s
+        where s.cgpa &gt;= :minCgpa
+          and s.backlogs &lt;= :maxBacklogs
+          and s.id not in (select a.student.id
+                           from Application a
+                           where a.drive.id = :driveId)
+        order by s.cgpa desc
+        """)
+    List&lt;Student&gt; findEligibleStudents(
+            @Param("minCgpa") Double minCgpa,
+            @Param("maxBacklogs") Integer maxBacklogs,
+            @Param("driveId") Long driveId);
+}</pre>
+      <div class="box">
+        <b>Why JPA and not plain JDBC</b> - no connection handling, no result set to map by hand,
+        and the same code runs on H2 during the demo and on MySQL in the lab.
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Coding - persistence</span><span>Slide 6</span></div>
+</section>
+
+<!-- =========================== 7. coding II ============================ -->
+<section class="slide">
+  <div class="kicker">4. Coding</div>
+  <h2>Service rules, controller and view</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>Service - the college rules live here</h3>
+<pre>@Service
+@Transactional(readOnly = true)
+public class ApplicationService {
+
+    @Transactional
+    public Application create(Long studentId, Long driveId,
+                              LocalDate appliedOn, String remarks) {
+        Student student = studentService.getById(studentId);
+        Drive drive = driveService.getById(driveId);
+
+        checkNotAlreadyApplied(studentId, driveId);
+        checkEligibility(student, drive);
+        ...
+    }
+
+    private void checkEligibility(Student s, Drive d) {
+        if (!d.isAcceptingApplications())
+            throw new EligibilityNotMetException(...);
+        if (s.getCgpa() &lt; d.getMinCgpa())
+            throw new EligibilityNotMetException(...);
+        if (s.getBacklogs() &gt; d.getMaxBacklogs())
+            throw new EligibilityNotMetException(...);
+    }
+}</pre>
+    </div>
+    <div>
+      <h3>Controller - request handling only</h3>
+<pre>@PostMapping("/save")
+public String saveStudent(
+        @Valid @ModelAttribute("student") Student student,
+        BindingResult bindingResult, Model model,
+        RedirectAttributes redirectAttributes) {
+
+    boolean isNew = student.getId() == null;
+    if (bindingResult.hasErrors()) return "students/form";
+
+    try {
+        Student saved = isNew
+            ? studentService.create(student)
+            : studentService.update(student.getId(), student);
+        redirectAttributes.addFlashAttribute("successMessage", ...);
+        return "redirect:/students/" + saved.getId();
+    } catch (BusinessRuleException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "students/form";
+    }
+}</pre>
+      <h3>View - Thymeleaf binds to the same object</h3>
+<pre class="light">&lt;form method="post" th:action="@{/students/save}"
+      th:object="${student}"&gt;
+  &lt;input type="text" th:field="*{rollNumber}"&gt;
+  &lt;span class="field-error"
+        th:if="${#fields.hasErrors('rollNumber')}"
+        th:errors="*{rollNumber}"&gt;&lt;/span&gt;
+&lt;/form&gt;</pre>
+    </div>
+  </div>
+  <div class="foot"><span>Coding - service, controller, view</span><span>Slide 7</span></div>
+</section>
+
+<!-- ====================== 8. coding practices ========================== -->
+<section class="slide">
+  <div class="kicker">4. Coding</div>
+  <h2>Coding practices and validation</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>Conventions used</h3>
+      <table>
+        <tr><th>Item</th><th>Convention</th><th>Example</th></tr>
+        <tr><td>Class</td><td>PascalCase, noun</td><td><code>ApplicationService</code></td></tr>
+        <tr><td>Method</td><td>camelCase, verb</td><td><code>findEligibleStudents()</code></td></tr>
+        <tr><td>Constant</td><td>UPPER_SNAKE</td><td><code>DISPLAY_DATE</code></td></tr>
+        <tr><td>Table / column</td><td>snake_case</td><td><code>roll_number</code></td></tr>
+        <tr><td>Package</td><td>lower case, by layer</td><td><code>com.college.placement.service</code></td></tr>
+        <tr><td>URL</td><td>same pattern per module</td><td><code>/students/{id}/edit</code></td></tr>
+      </table>
+      <h3>Practices</h3>
+      <ul>
+        <li>Constructor injection, no field <code>@Autowired</code>.</li>
+        <li><code>@Transactional(readOnly = true)</code> on the class, write methods override it.</li>
+        <li>Update copies form fields on to the loaded row, so child rows are never wiped.</li>
+        <li>Redirect after POST with flash messages.</li>
+        <li>Comments explain the reason, not the syntax.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Two levels of checking</h3>
+      <div class="box accent">
+        <b>Field level</b> - Bean Validation on the entity, run by <code>@Valid</code>:
+        compulsory fields, valid email, phone exactly 10 digits, CGPA 0 to 10,
+        batch year 2015 to 2035, backlogs not negative.
+      </div>
+      <div class="box accent" style="margin-top:10px">
+        <b>Rule level</b> - in the service, so the rule holds even if the form is bypassed:
+        <ol style="margin:6px 0 0; padding-left:18px">
+          <li>Roll number and email unique</li>
+          <li>Company name unique</li>
+          <li>Drive must be <b>Open</b> to accept applications</li>
+          <li>CGPA ≥ drive cut off</li>
+          <li>Backlogs ≤ allowed backlogs</li>
+          <li>No student twice in one drive (also a UNIQUE key)</li>
+        </ol>
+      </div>
+      <h3>Error handling</h3>
+      <p><code>@ControllerAdvice</code> catches <code>ResourceNotFoundException</code> (404),
+      <code>BusinessRuleException</code> (409) and anything unexpected (500), and shows the
+      project error page instead of a stack trace.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Coding practices</span><span>Slide 8</span></div>
+</section>
+
+<!-- =========================== 9. screens ============================== -->
+<section class="slide">
+  <div class="kicker">5. The running portal</div>
+  <h2>Dashboard</h2>
+  <div class="rule" style="margin-bottom:10px"></div>
+  <img class="shot" src="screenshots/dashboard.png" alt="Dashboard" style="max-height:150mm; object-fit:cover; object-position:top">
+  <div class="foot"><span>Six calculated tiles, latest applications, branch wise bars, drives lined up</span><span>Slide 9</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">5. The running portal</div>
+  <h2>Student list and student form</h2>
+  <div class="rule" style="margin-bottom:10px"></div>
+  <div class="cols">
+    <div><img class="shot" src="screenshots/students.png" alt="Students"></div>
+    <div><img class="shot" src="screenshots/student-form.png" alt="Student form"></div>
+  </div>
+  <div class="foot"><span>Search by name or roll number, filter by branch · server side validation on the form</span><span>Slide 10</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">5. The running portal</div>
+  <h2>Drive details and application tracking</h2>
+  <div class="rule" style="margin-bottom:10px"></div>
+  <div class="cols">
+    <div><img class="shot" src="screenshots/drive-details.png" alt="Drive details"></div>
+    <div><img class="shot" src="screenshots/applications.png" alt="Applications"></div>
+  </div>
+  <div class="foot"><span>Eligible students are found by a JPQL query · stage and remark updated inline</span><span>Slide 11</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">5. The running portal</div>
+  <h2>Placement reports</h2>
+  <div class="rule" style="margin-bottom:10px"></div>
+  <img class="shot" src="screenshots/reports.png" alt="Reports" style="max-height:150mm; object-fit:cover; object-position:top">
+  <div class="foot"><span>Branch wise percentage, stage wise counts and the confirmed offer list - all from joins</span><span>Slide 12</span></div>
+</section>
+
+<!-- ============================ 10. ER ================================= -->
+<section class="slide">
+  <div class="kicker">6. Database description</div>
+  <h2>ER design - five tables</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div style="flex:1.1">
+<pre class="light">  +-----------------+            +------------------+
+  |   DEPARTMENT    |            |     COMPANY      |
+  | PK id           |            | PK id            |
+  |    name         |            |    name (unique) |
+  |    code (unique)|            |    industry,city |
+  |    hod_name     |            |    hr_name/email |
+  +--------+--------+            +--------+---------+
+           | 1                            | 1
+           | N                            | N
+  +--------v--------+            +--------v---------+
+  |     STUDENT     |            |      DRIVE       |
+  | PK id           |            | PK id            |
+  |    roll_number U|            | FK company_id    |
+  |    first/last   |            |    job_role      |
+  |    email  U     |            |    package_lpa   |
+  |    cgpa         |            |    min_cgpa      |
+  |    batch_year   |            |    max_backlogs  |
+  |    backlogs     |            |    drive_date    |
+  | FK department_id|            |    status        |
+  +--------+--------+            +--------+---------+
+           | 1     +---------------+      | 1
+           |   N   |  APPLICATION  |  N   |
+           +------>| PK id         |<-----+
+                   | FK student_id |
+                   | FK drive_id   |
+                   |    applied_on |
+                   |    status     |
+                   |    remarks    |
+                   | UNIQUE(student_id, drive_id)
+                   +---------------+</pre>
+    </div>
+    <div>
+      <h3>Relationships</h3>
+      <table>
+        <tr><th>Between</th><th>Type</th><th>Meaning</th></tr>
+        <tr><td>Student → Department</td><td>N : 1</td><td>Many students in one branch</td></tr>
+        <tr><td>Drive → Company</td><td>N : 1</td><td>One company, many drives</td></tr>
+        <tr><td>Student ↔ Drive</td><td>M : N</td><td>Resolved by <b>application</b></td></tr>
+      </table>
+      <div class="box accent" style="margin-top:12px">
+        <b>Why a junction entity and not <code>@ManyToMany</code></b> - the link itself carries data:
+        <code>applied_on</code>, <code>status</code> and <code>remarks</code>. A plain many to many
+        table can only store the two keys.
+      </div>
+      <h3>Sample data loaded</h3>
+      <div class="tiles">
+        <div class="tile"><div class="n">20</div><div class="l">Students</div></div>
+        <div class="tile"><div class="n">8</div><div class="l">Companies</div></div>
+        <div class="tile"><div class="n">10</div><div class="l">Drives</div></div>
+        <div class="tile"><div class="n">24</div><div class="l">Applications</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Database description - ER design</span><span>Slide 13</span></div>
+</section>
+
+<!-- ======================= 11. normalisation =========================== -->
+<section class="slide">
+  <div class="kicker">6. Database description</div>
+  <h2>Normalisation - from one register to five tables</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>Unnormalised register</h3>
+      <pre class="light">roll_no, student_name, branch, hod, cgpa,
+company, hr_name, hr_email, role, package,
+drive_date, status, remark</pre>
+      <h3>1NF - atomic values, no repeating groups</h3>
+      <p><code>student_name</code> split into <code>first_name</code> and <code>last_name</code>.
+      A student applying to three companies is not stored as company1, company2, company3 -
+      each application becomes its own row.</p>
+      <h3>2NF - remove partial dependency</h3>
+      <p>With key (roll_no, company): <code>cgpa</code> and <code>branch</code> depend only on
+      roll_no, while <code>hr_name</code> and <code>hr_email</code> depend only on company.
+      So the register was split into <b>student</b>, <b>company</b> and <b>drive</b>, each with a
+      single column key. <b>application</b> keeps only what needs both keys -
+      applied_on, status, remarks.</p>
+      <h3>3NF - remove transitive dependency</h3>
+      <p>roll_no → branch → hod. Branch data moved to the <b>department</b> table and the student
+      row now stores only <code>department_id</code>.</p>
+    </div>
+    <div>
+      <h3>What normalisation gave us</h3>
+      <table>
+        <tr><th>Anomaly</th><th>Before</th><th>After</th></tr>
+        <tr><td>Update</td><td>HR email of a company repeated in every drive row</td><td>One row update in <b>company</b></td></tr>
+        <tr><td>Insert</td><td>A company could not be recorded before it announced a drive</td><td>Company row is independent</td></tr>
+        <tr><td>Delete</td><td>Deleting the last application lost the company details</td><td>Only the link row is deleted</td></tr>
+        <tr><td>Redundancy</td><td>Branch name and HOD typed for every student</td><td>Stored once, referenced by id</td></tr>
+      </table>
+      <h3>Keys and constraints</h3>
+      <ul>
+        <li>Primary key - identity <code>id</code> on all five tables.</li>
+        <li>Candidate keys - <code>roll_number</code>, <code>email</code>, <code>company.name</code>, <code>department.code</code>.</li>
+        <li>Foreign keys - <code>student.department_id</code>, <code>drive.company_id</code>,
+            <code>application.student_id</code>, <code>application.drive_id</code>.</li>
+        <li>Composite unique key - <code>(student_id, drive_id)</code> in application.</li>
+        <li><code>ON DELETE</code> handled by JPA cascade with <code>orphanRemoval = true</code>.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Database description - normalisation</span><span>Slide 14</span></div>
+</section>
+
+<!-- ============================ 12. joins ============================== -->
+<section class="slide">
+  <div class="kicker">6. Database description</div>
+  <h2>Joins used in the project</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>a) Student with branch - inner join, 2 tables</h3>
+<pre>SELECT s.roll_number, s.first_name, s.cgpa, d.code
+FROM student s
+JOIN department d ON d.id = s.department_id
+ORDER BY s.roll_number;</pre>
+      <h3>b) Confirmed offers - 3 table join</h3>
+<pre>SELECT s.roll_number, c.name AS company,
+       dr.job_role, dr.package_lpa
+FROM application a
+JOIN student s  ON s.id  = a.student_id
+JOIN drive   dr ON dr.id = a.drive_id
+JOIN company c  ON c.id  = dr.company_id
+WHERE a.status = 'SELECTED'
+ORDER BY dr.package_lpa DESC;</pre>
+      <p style="font-size:11.5px">In JPQL the same query uses <code>join fetch</code>, which loads all
+      four tables in one select instead of one query per row (the N+1 problem).</p>
+    </div>
+    <div>
+      <h3>c) Branch wise report - left join + group by</h3>
+<pre>SELECT d.code,
+       COUNT(DISTINCT s.id) AS total,
+       COUNT(DISTINCT CASE WHEN a.status='SELECTED'
+                           THEN s.id END) AS placed
+FROM department d
+LEFT JOIN student s     ON s.department_id = d.id
+LEFT JOIN application a ON a.student_id = s.id
+GROUP BY d.code ORDER BY d.code;</pre>
+      <p style="font-size:11.5px"><b>LEFT JOIN</b> is needed so a branch with zero placements
+      (ECE in the sample data) still shows in the report with 0%.</p>
+      <h3>d) Eligible students - join with NOT IN sub query</h3>
+<pre>SELECT s.* FROM student s
+WHERE s.cgpa &gt;= 7.0 AND s.backlogs &lt;= 0
+  AND s.id NOT IN (SELECT a.student_id
+                   FROM application a
+                   WHERE a.drive_id = 3);</pre>
+      <div class="box">
+        <b>Note on DISTINCT</b> - the placed count uses
+        <code>COUNT(DISTINCT a.student_id)</code>, because a student selected by two companies
+        must still be counted as one placed student.
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Database description - joins</span><span>Slide 15</span></div>
+</section>
+
+<!-- ====================== 13. testing / closing ======================== -->
+<section class="slide">
+  <div class="kicker">7. Testing and conclusion</div>
+  <h2>Results, testing and future scope</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>Automated tests - all passing</h3>
+      <table>
+        <tr><th>Test</th><th>What it proves</th></tr>
+        <tr><td>studentCrudWorks</td><td>Insert → read → update → delete, then 404 for the deleted id</td></tr>
+        <tr><td>duplicateRollNumberIsRefused</td><td>Repeated roll number is rejected</td></tr>
+        <tr><td>duplicateApplicationIsRejected</td><td>Same student cannot apply twice to one drive</td></tr>
+        <tr><td>lowCgpaApplicationIsRejected</td><td>6.2 CGPA student refused for a 7.0 cut off drive</td></tr>
+        <tr><td>placedCountMatchesSelected</td><td>Report count equals the SELECTED rows</td></tr>
+      </table>
+      <p style="margin-top:8px"><code>Tests run: 5, Failures: 0, Errors: 0</code></p>
+      <h3>Manual testing</h3>
+      <p>Every CRUD path in all four modules, search and filter, drive status switch, applying
+      from the eligible list, empty form submit, duplicate entry, ineligible application and a
+      wrong URL.</p>
+    </div>
+    <div>
+      <h3>What the sample season shows</h3>
+      <div class="tiles">
+        <div class="tile"><div class="n">40%</div><div class="l">Batch placed</div></div>
+        <div class="tile"><div class="n">7.0</div><div class="l">Highest LPA</div></div>
+        <div class="tile"><div class="n">4.84</div><div class="l">Average LPA</div></div>
+      </div>
+      <h3>Future scope</h3>
+      <ul>
+        <li>Spring Security login - officer, coordinator and student see different screens.</li>
+        <li>Student self service: apply directly and track the status.</li>
+        <li>Resume upload as a file instead of a link.</li>
+        <li>Email / SMS alert when a drive opens or a result is declared.</li>
+        <li>Export the report tables to Excel or PDF.</li>
+        <li>Switch to MySQL for permanent storage and add Flyway for schema versions.</li>
+      </ul>
+      <div class="box accent">
+        <b>Conclusion</b> - the project covers the full cycle of a placement season with clean
+        CRUD operations, a normalised database, business rules enforced in one place and reports
+        that are generated from joins instead of being counted by hand.
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Thank you - questions are welcome</span><span>Slide 16</span></div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('New application')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1>New application</h1>
+                <p>Link a student to an open drive</p>
+            </div>
+            <div class="topbar-actions">
+                <a class="btn btn-ghost" th:href="@{/applications}">Back to list</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- bound to ApplicationForm, not to the entity, because only
+                             two ids and a date are collected on this screen -->
+                        <form method="post" th:action="@{/applications/save}" th:object="${applicationForm}">
+                            <div class="form-grid">
+                                <div class="field wide">
+                                    <label for="studentId">Student *</label>
+                                    <select id="studentId" th:field="*{studentId}"
+                                            th:classappend="${#fields.hasErrors('studentId')} ? 'invalid'">
+                                        <option value="">Select student</option>
+                                        <option th:each="student : ${students}"
+                                                th:value="${student.id}"
+                                                th:text="${student.rollNumber} + ' - ' + ${student.fullName}
+                                                         + ' (' + ${student.department.code} + ', '
+                                                         + ${student.cgpa} + ' CGPA)'">student</option>
+                                    </select>
+                                    <span class="field-error" th:if="${#fields.hasErrors('studentId')}"
+                                          th:errors="*{studentId}">error</span>
+                                </div>
+
+                                <div class="field wide">
+                                    <label for="driveId">Open drive *</label>
+                                    <select id="driveId" th:field="*{driveId}"
+                                            th:classappend="${#fields.hasErrors('driveId')} ? 'invalid'">
+                                        <option value="">Select drive</option>
+                                        <option th:each="drive : ${openDrives}"
+                                                th:value="${drive.id}"
+                                                th:text="${drive.company.name} + ' - ' + ${drive.jobRole}
+                                                         + ' (' + ${drive.packageLpa} + ' LPA, min '
+                                                         + ${drive.minCgpa} + ' CGPA)'">drive</option>
+                                    </select>
+                                    <span class="field-error" th:if="${#fields.hasErrors('driveId')}"
+                                          th:errors="*{driveId}">error</span>
+                                    <span class="note" th:if="${#lists.isEmpty(openDrives)}">
+                                        No drive is open right now - open one from the drive list first.
+                                    </span>
+                                </div>
+
+                                <div class="field">
+                                    <label for="appliedOn">Applied on *</label>
+                                    <input type="date" id="appliedOn" th:field="*{appliedOn}"
+                                           th:classappend="${#fields.hasErrors('appliedOn')} ? 'invalid'">
+                                    <span class="field-error" th:if="${#fields.hasErrors('appliedOn')}"
+                                          th:errors="*{appliedOn}">error</span>
+                                </div>
+
+                                <div class="field">
+                                    <label for="remarks">Remark</label>
+                                    <input type="text" id="remarks" th:field="*{remarks}"
+                                           placeholder="Optional note">
+                                    <span class="field-error" th:if="${#fields.hasErrors('remarks')}"
+                                          th:errors="*{remarks}">error</span>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="btn" type="submit">Submit application</button>
+                                <a class="btn btn-ghost" th:href="@{/applications}">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Rules checked before saving</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="plain">
+                            <li>The drive has to be in the <strong>Open</strong> state.</li>
+                            <li>The student's CGPA must be equal to or above the drive cut off.</li>
+                            <li>Live backlogs must be within the limit set for that drive.</li>
+                            <li>The same student cannot appear twice in one drive - the
+                                <span class="mono">(student_id, drive_id)</span> pair is unique in the table.</li>
+                        </ul>
+                        <p class="small muted">
+                            Every new application starts at the <strong>Applied</strong> stage. The stage is
+                            changed later from the application list.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

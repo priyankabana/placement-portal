@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Companies')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1>Recruiters</h1>
+                <p th:text="${#lists.size(companies)} + ' company record(s)'">0</p>
+            </div>
+            <div class="topbar-actions" th:if="${session.user.staff}">
+                <a class="btn" th:href="@{/companies/new}">Add recruiter</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <form class="filter-bar" method="get" th:action="@{/companies}">
+                    <div class="field">
+                        <label for="keyword">Company or industry</label>
+                        <input type="text" id="keyword" name="keyword" th:value="${keyword}"
+                               placeholder="e.g. Infosys or Banking">
+                    </div>
+                    <div class="field">
+                        <button class="btn" type="submit">Search</button>
+                    </div>
+                    <div class="field">
+                        <a class="btn btn-ghost" th:href="@{/companies}">Clear</a>
+                    </div>
+                </form>
+
+                <div class="table-wrap">
+                    <table class="data">
+                        <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>City</th>
+                            <th>HR contact</th>
+                            <th class="num">Drives</th>
+                            <th class="actions-cell" th:if="${session.user.staff}">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="company : ${companies}">
+                            <td>
+                                <a class="row-title" th:href="@{'/companies/' + ${company.id}}"
+                                   th:text="${company.name}">name</a>
+                                <div class="row-sub" th:text="${company.website} ?: '-'">site</div>
+                            </td>
+                            <td th:text="${company.industry}">industry</td>
+                            <td th:text="${company.city} ?: '-'">city</td>
+                            <td>
+                                <div th:text="${company.hrName}">hr</div>
+                                <div class="row-sub" th:text="${company.hrEmail}">mail</div>
+                            </td>
+                            <!-- size of the mapped collection, no extra query written by us -->
+                            <td class="num" th:text="${#lists.size(company.drives)}">0</td>
+                            <td class="actions-cell" th:if="${session.user.staff}">
+                                <a class="btn btn-ghost btn-sm" th:href="@{'/companies/' + ${company.id}}">View</a>
+                                <a class="btn btn-ghost btn-sm" th:href="@{'/companies/' + ${company.id} + '/edit'}">Edit</a>
+                                <form class="inline-form" method="post"
+                                      th:action="@{'/companies/' + ${company.id} + '/delete'}"
+                                      th:data-confirm="'Delete ' + ${company.name} + ' along with its drives?'">
+                                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(companies)}">
+                            <td colspan="6" class="empty">No recruiter found for this search.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

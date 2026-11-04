@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+  Common pieces of every page - the <head>, the sidebar, the flash messages
+  and the footer. Each page pulls them in with th:replace, so the navigation
+  is written only once.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(pageTitle)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${pageTitle} + ' | Placement Cell'">Placement Cell</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <script th:src="@{/js/app.js}" defer></script>
+</head>
+
+<body>
+
+<!-- ------------------------------------------------------------ sidebar -->
+<aside class="sidebar" th:fragment="sidebar">
+    <div class="brand">
+        <div class="brand-name">Training &amp; Placement Cell</div>
+        <div class="brand-sub">Admin Console</div>
+    </div>
+
+    <!-- the menu is built from the role kept in the session -->
+    <nav class="nav" th:with="user=${session.user}">
+
+        <!-- student sees only their own page -->
+        <th:block th:if="${user != null and user.student}">
+            <div class="nav-label">My portal</div>
+            <a th:href="@{/my-profile}" th:classappend="${activePage == 'my-profile'} ? 'active'">My profile</a>
+
+            <div class="nav-label">Placement information</div>
+            <a th:href="@{/companies}" th:classappend="${activePage == 'companies'} ? 'active'">Companies</a>
+            <a th:href="@{/drives}" th:classappend="${activePage == 'drives'} ? 'active'">Campus Drives</a>
+        </th:block>
+
+        <!-- officer and faculty see the full menu -->
+        <th:block th:unless="${user != null and user.student}">
+            <div class="nav-label">Overview</div>
+            <a th:href="@{/}" th:classappend="${activePage == 'dashboard'} ? 'active'">Dashboard</a>
+            <a th:href="@{/reports}" th:classappend="${activePage == 'reports'} ? 'active'">Reports</a>
+
+            <div class="nav-label">Master data</div>
+            <a th:href="@{/students}" th:classappend="${activePage == 'students'} ? 'active'">Students</a>
+            <a th:href="@{/companies}" th:classappend="${activePage == 'companies'} ? 'active'">Companies</a>
+
+            <div class="nav-label">Placement process</div>
+            <a th:href="@{/drives}" th:classappend="${activePage == 'drives'} ? 'active'">Campus Drives</a>
+            <a th:href="@{/applications}" th:classappend="${activePage == 'applications'} ? 'active'">Applications</a>
+        </th:block>
+
+    </nav>
+
+    <div class="sidebar-foot" th:with="user=${session.user}">
+        <div th:if="${user != null}">
+            <div class="who" th:text="${user.displayName}">name</div>
+            <div class="who-sub" th:text="${user.subtitle} ?: ${user.role.label}">role</div>
+            <div class="who-role" th:text="${user.role.label}">ROLE</div>
+            <a class="signout" th:href="@{/logout}">Sign out</a>
+        </div>
+        <div th:if="${user == null}">Session 2026 - 27</div>
+    </div>
+</aside>
+
+<!-- ------------------------------------- success / error flash messages -->
+<div th:fragment="alerts">
+    <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+</div>
+
+<!-- ------------------------------------------------------------- footer -->
+<footer class="footer" th:fragment="footer">
+    <span>Student Placement Management System - Spring Boot, Spring Data JPA and Thymeleaf</span>
+    <span>Data source: H2 (in memory)</span>
+</footer>
+
+</body>
+</html>

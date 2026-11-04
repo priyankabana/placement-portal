@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My profile')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1 th:text="'Welcome, ' + ${student.firstName}">Welcome</h1>
+                <p>
+                    <span class="mono" th:text="${student.rollNumber}">roll</span>
+                    &nbsp;&middot;&nbsp;
+                    <span th:text="${student.department.name}">branch</span>
+                    &nbsp;&middot;&nbsp;
+                    <span th:text="'Batch of ' + ${student.batchYear}">batch</span>
+                </p>
+            </div>
+            <div class="topbar-actions">
+                <span class="pill pill-selected" th:if="${student.placed}">You are placed</span>
+                <span class="pill pill-plain" th:unless="${student.placed}">Not placed yet</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="stat-row">
+                <div class="stat">
+                    <div class="stat-label">CGPA</div>
+                    <div class="stat-value" th:text="${student.cgpa}">0</div>
+                </div>
+                <div class="stat amber">
+                    <div class="stat-label">Live backlogs</div>
+                    <div class="stat-value" th:text="${student.backlogs}">0</div>
+                </div>
+                <div class="stat slate">
+                    <div class="stat-label">Applications</div>
+                    <div class="stat-value" th:text="${#lists.size(applications)}">0</div>
+                </div>
+                <div class="stat green">
+                    <div class="stat-label">Drives open now</div>
+                    <div class="stat-value" th:text="${#lists.size(openDrives)}">0</div>
+                </div>
+            </div>
+
+            <!-- my applications -->
+            <div class="card">
+                <div class="card-head">
+                    <h2>My applications</h2>
+                    <span class="hint">status is updated by the placement cell</span>
+                </div>
+                <div class="card-body tight">
+                    <div class="table-wrap">
+                        <table class="data">
+                            <thead>
+                            <tr>
+                                <th>Company</th><th>Role</th><th>Drive date</th>
+                                <th class="num">Package</th><th>Applied on</th><th>Stage</th><th>Remark</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="app : ${applications}">
+                                <td class="row-title" th:text="${app.drive.company.name}">company</td>
+                                <td th:text="${app.drive.jobRole}">role</td>
+                                <td th:text="${app.drive.driveDateDisplay}">date</td>
+                                <td class="num" th:text="${app.drive.packageLpa} + ' LPA'">0</td>
+                                <td th:text="${app.appliedOnDisplay}">date</td>
+                                <td>
+                                    <span class="pill" th:classappend="'pill-' + ${app.status.name().toLowerCase()}"
+                                          th:text="${app.status.label}">stage</span>
+                                </td>
+                                <td class="small muted" th:text="${app.remarks} ?: '-'">remark</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(applications)}">
+                                <td colspan="7" class="empty">
+                                    You have not applied to any drive yet. Contact the placement cell.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- drives that are open, with my eligibility worked out -->
+            <div class="card">
+                <div class="card-head">
+                    <h2>Drives open for applications</h2>
+                    <span class="hint">eligibility checked against your CGPA and backlogs</span>
+                </div>
+                <div class="card-body tight">
+                    <div class="table-wrap">
+                        <table class="data">
+                            <thead>
+                            <tr>
+                                <th>Company</th><th>Role</th><th>Date</th>
+                                <th class="num">Package</th><th class="num">Cut off</th>
+                                <th>Eligibility</th><th class="actions-cell">Apply</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="drive : ${openDrives}">
+                                <td class="row-title" th:text="${drive.company.name}">company</td>
+                                <td th:text="${drive.jobRole}">role</td>
+                                <td th:text="${drive.driveDateDisplay}">date</td>
+                                <td class="num" th:text="${drive.packageLpa} + ' LPA'">0</td>
+                                <td class="num">
+                                    <span th:text="${drive.minCgpa} + ' CGPA'">0</span>
+                                    <div class="row-sub" th:text="'max ' + ${drive.maxBacklogs} + ' backlog'">0</div>
+                                </td>
+                                <!-- the same rule the service uses while saving an application -->
+                                <td th:with="eligible=${student.cgpa >= drive.minCgpa and student.backlogs <= drive.maxBacklogs},
+                                             applied=${appliedDriveIds.contains(drive.id)}">
+                                    <span class="pill pill-selected" th:if="${eligible}">Eligible</span>
+                                    <span class="pill pill-rejected" th:unless="${eligible}">Not eligible</span>
+                                </td>
+                                <td class="actions-cell"
+                                    th:with="eligible=${student.cgpa >= drive.minCgpa and student.backlogs <= drive.maxBacklogs},
+                                             applied=${appliedDriveIds.contains(drive.id)}">
+                                    <!-- already applied, eligible, or below the cut off -->
+                                    <span class="pill pill-applied" th:if="${applied}">Applied</span>
+                                    <form class="inline-form" method="post" th:action="@{/my-applications/apply}"
+                                          th:if="${!applied and eligible}"
+                                          th:data-confirm="'Apply to ' + ${drive.company.name} + ' - ' + ${drive.jobRole} + '?'">
+                                        <input type="hidden" name="driveId" th:value="${drive.id}">
+                                        <button class="btn btn-sm" type="submit">Apply</button>
+                                    </form>
+                                    <span class="small muted" th:if="${!applied and !eligible}">Cannot apply</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(openDrives)}">
+                                <td colspan="7" class="empty">No drive is open right now.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head"><h2>My details</h2></div>
+                <div class="card-body">
+                    <div class="detail-list">
+                        <div class="detail-item"><div class="k">Email</div>
+                            <div class="v" th:text="${student.email}">mail</div></div>
+                        <div class="detail-item"><div class="k">Mobile</div>
+                            <div class="v" th:text="${student.phone} ?: 'Not provided'">phone</div></div>
+                        <div class="detail-item"><div class="k">Resume</div>
+                            <div class="v" th:text="${student.resumeUrl} ?: 'Not uploaded'">link</div></div>
+                        <div class="detail-item"><div class="k">Branch head</div>
+                            <div class="v" th:text="${student.department.hodName}">hod</div></div>
+                    </div>
+                    <p class="small muted" style="margin-top:14px">
+                        Personal details can be corrected only by the placement cell. Applying to a
+                        drive is the one action a student can do here.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>
