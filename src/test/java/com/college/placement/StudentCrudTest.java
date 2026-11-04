@@ -34,7 +34,7 @@ class StudentCrudTest {
         student.setFirstName("Test");
         student.setLastName("Candidate");
         student.setEmail("test.candidate@campus.edu.in");
-        student.setPhone("9876500099");
+        student.setPhone("9000099099");
         student.setCgpa(7.5);
         student.setBatchYear(2026);
         student.setBacklogs(0);
@@ -48,7 +48,7 @@ class StudentCrudTest {
         edited.setFirstName("Test");
         edited.setLastName("Candidate");
         edited.setEmail("test.candidate@campus.edu.in");
-        edited.setPhone("9876500099");
+        edited.setPhone("9000099099");
         edited.setCgpa(8.1);
         edited.setBatchYear(2026);
         edited.setBacklogs(0);
