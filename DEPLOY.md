@@ -6,8 +6,8 @@ from Spring profiles, so it runs on any Docker host. The steps below use Render'
 | Item | Value |
 |---|---|
 | GitHub repository | https://github.com/priyankabana/placement-portal |
-| Render service name | `placement-portal` |
-| Expected URL | https://placement-portal.onrender.com (may differ: Render adds a suffix if the name is taken) |
+| Render service name | `vu-placement-portal` |
+| Expected URL | https://vu-placement-portal.onrender.com (may differ: Render adds a suffix if the name is taken) |
 | Health check | `/actuator/health` |
 | Default profiles | `h2,prod` (in memory sample data, no database needed) |
 
@@ -25,23 +25,23 @@ Actions tab shows a green run (tests, then the Docker build).
 
 1. Sign in at https://render.com with GitHub.
 2. **New > Blueprint**, then connect `priyankabana/placement-portal`.
-3. Render reads `render.yaml` and shows one web service, `placement-portal`, plan Free,
+3. Render reads `render.yaml` and shows one web service, `vu-placement-portal`, plan Free,
    runtime Docker. Click **Apply**.
 4. The first build takes a few minutes (Maven downloads the dependencies inside the image).
    When the log shows `Started PlacementPortalApplication` and the health check passes, the
    service is live.
 
-If `placement-portal` is already taken, Render adds a suffix to the URL; use whatever
+If `vu-placement-portal` is already taken, Render adds a suffix to the URL; use whatever
 URL the dashboard shows.
 
 ## 3. Check it
 
 ```bash
-curl https://placement-portal.onrender.com/actuator/health   # {"status":"UP"}
-curl https://placement-portal.onrender.com/api/stats
+curl https://vu-placement-portal.onrender.com/actuator/health   # {"status":"UP"}
+curl https://vu-placement-portal.onrender.com/api/stats
 ```
 
-Open https://placement-portal.onrender.com and sign in with a demo account from
+Open https://vu-placement-portal.onrender.com and sign in with a demo account from
 `docs/login-credentials.txt` (sample data only; passwords are stored as BCrypt hashes).
 
 **Free tier cold start:** a free service sleeps after about 15 minutes without traffic. The

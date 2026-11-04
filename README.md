@@ -6,7 +6,7 @@
 
 Advanced Java mini-project (**team project**, B.Tech Computer Engineering). Runs out of the box on an in-memory H2 database with one season of sample data.
 
-**Live demo:** https://placement-portal.onrender.com (Render free tier; the exact URL may differ once deployed, and the first request after a quiet period takes about 50 seconds while the service wakes up)  
+**Live demo:** https://vu-placement-portal.onrender.com (Render free tier; the exact URL may differ once deployed, and the first request after a quiet period takes about 50 seconds while the service wakes up)  
 **Repo:** https://github.com/priyankabana/placement-portal
 
 ## Screenshots
@@ -178,7 +178,7 @@ Everything for a free deployment is in the repo:
 - `render.yaml`: Render blueprint for a free web service `placement-portal` with `/actuator/health` as the health check and `SPRING_PROFILES_ACTIVE=h2,prod` (self-contained demo, data resets on restart)
 - `application-prod.properties`: H2 console off, SQL logging off, cached templates, no stack traces on error pages, HTTP-only session cookie, forwarded headers trusted
 
-On Render: **New > Blueprint**, pick `priyankabana/placement-portal`, apply. Expected URL https://placement-portal.onrender.com (Render adds a suffix if the name is taken). Full steps, the MySQL switch (`mysql,prod` + `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`) and other Docker hosts are in [DEPLOY.md](DEPLOY.md). Not suitable for Vercel (server-rendered Java app).
+On Render: **New > Blueprint**, pick `priyankabana/placement-portal`, apply. Expected URL https://vu-placement-portal.onrender.com (Render adds a suffix if the name is taken). Full steps, the MySQL switch (`mysql,prod` + `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`) and other Docker hosts are in [DEPLOY.md](DEPLOY.md). Not suitable for Vercel (server-rendered Java app).
 
 Before a real (non-demo) deployment: rotate/remove the demo accounts and consider the full Spring Security filter chain (CSRF tokens, login throttling).
 

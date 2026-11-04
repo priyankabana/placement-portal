@@ -3,7 +3,7 @@
 # database, so no database has to be created first.
 services:
   - type: web
-    name: placement-portal
+    name: vu-placement-portal
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
