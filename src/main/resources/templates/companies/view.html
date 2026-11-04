@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Recruiter profile')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1 th:text="${company.name}">Company</h1>
+                <p>
+                    <span th:text="${company.industry}">industry</span>
+                    &nbsp;&middot;&nbsp;
+                    <span th:text="${company.city} ?: 'City not recorded'">city</span>
+                </p>
+            </div>
+            <div class="topbar-actions" th:if="${session.user.staff}">
+                <a class="btn btn-ghost" th:href="@{/drives/new}">Announce drive</a>
+                <a class="btn" th:href="@{'/companies/' + ${company.id} + '/edit'}">Edit</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Contact details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="detail-list">
+                        <div class="detail-item">
+                            <div class="k">HR contact</div>
+                            <div class="v" th:text="${company.hrName}">hr</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">HR email</div>
+                            <div class="v" th:text="${company.hrEmail}">mail</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Website</div>
+                            <div class="v" th:text="${company.website} ?: 'Not recorded'">site</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Total drives</div>
+                            <div class="v" th:text="${#lists.size(drives)}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Drives by this company</h2>
+                    <a class="small" th:href="@{/drives}">All drives</a>
+                </div>
+                <div class="card-body tight">
+                    <div class="table-wrap">
+                        <table class="data">
+                            <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th class="num">Package</th>
+                                <th class="num">Cut off</th>
+                                <th class="num">Applications</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="drive : ${drives}">
+                                <td>
+                                    <a class="row-title" th:href="@{'/drives/' + ${drive.id}}"
+                                       th:text="${drive.jobRole}">role</a>
+                                </td>
+                                <td th:text="${drive.driveDateDisplay}">date</td>
+                                <td th:text="${drive.location} ?: '-'">city</td>
+                                <td class="num" th:text="${drive.packageLpa} + ' LPA'">0</td>
+                                <td class="num" th:text="${drive.minCgpa} + ' CGPA'">0</td>
+                                <td class="num" th:text="${#lists.size(drive.applications)}">0</td>
+                                <td>
+                                    <span class="pill" th:classappend="'pill-' + ${drive.status.name().toLowerCase()}"
+                                          th:text="${drive.status.label}">status</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(drives)}">
+                                <td colspan="7" class="empty">This company has not conducted any drive yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-gap">
+                <a class="btn btn-ghost" th:href="@{/companies}">Back to recruiters</a>
+                <form class="inline-form" method="post" th:if="${session.user.staff}"
+                      th:action="@{'/companies/' + ${company.id} + '/delete'}"
+                      th:data-confirm="'Delete ' + ${company.name} + ' and all of its drives?'">
+                    <button class="btn btn-danger" type="submit">Delete recruiter</button>
+                </form>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

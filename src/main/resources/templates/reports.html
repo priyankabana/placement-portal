@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reports')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1>Placement reports</h1>
+                <p>Numbers below are calculated with JPQL queries at the time the page opens</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="stat-row">
+                <div class="stat green">
+                    <div class="stat-label">Placement percentage</div>
+                    <div class="stat-value" th:text="${stats.placementPercentage()} + '%'">0</div>
+                    <div class="stat-note"
+                         th:text="${stats.placedStudents()} + ' of ' + ${stats.totalStudents()} + ' students'">-</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Highest package</div>
+                    <div class="stat-value" th:text="${stats.highestPackage()} + ' LPA'">0</div>
+                    <div class="stat-note">Best offer of the season</div>
+                </div>
+                <div class="stat slate">
+                    <div class="stat-label">Average package</div>
+                    <div class="stat-value" th:text="${stats.averagePackage()} + ' LPA'">0</div>
+                    <div class="stat-note">Across confirmed offers</div>
+                </div>
+                <div class="stat amber">
+                    <div class="stat-label">Offers made</div>
+                    <div class="stat-value" th:text="${#lists.size(offers)}">0</div>
+                    <div class="stat-note">Applications marked selected</div>
+                </div>
+            </div>
+
+            <div class="grid-halves">
+                <!-- ------------------------------------- branch wise summary -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Branch wise placement</h2>
+                        <span class="hint">student joined with department</span>
+                    </div>
+                    <div class="card-body tight">
+                        <div class="table-wrap">
+                            <table class="data">
+                                <thead>
+                                <tr>
+                                    <th>Branch</th>
+                                    <th class="num">Students</th>
+                                    <th class="num">Placed</th>
+                                    <th class="num">Percentage</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="row : ${departmentStats}">
+                                    <td>
+                                        <span class="row-title" th:text="${row.departmentCode()}">CSE</span>
+                                        <div class="row-sub" th:text="${row.departmentName()}">name</div>
+                                    </td>
+                                    <td class="num" th:text="${row.totalStudents()}">0</td>
+                                    <td class="num" th:text="${row.placedStudents()}">0</td>
+                                    <td class="num" th:text="${row.placementPercentage()} + '%'">0</td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(departmentStats)}">
+                                    <td colspan="4" class="empty">No department data.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ------------------------------------------ stage wise bars -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Stage wise applications</h2>
+                        <span class="hint">count of every status</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="bar-row" th:each="entry : ${statusCounts}">
+                            <span class="bar-key" th:text="${entry.key.label}">stage</span>
+                            <span class="bar-track">
+                                <span class="bar-fill"
+                                      th:classappend="${entry.key.name() == 'SELECTED' ? 'green'
+                                                        : (entry.key.name() == 'SHORTLISTED' ? 'amber'
+                                                        : (entry.key.name() == 'REJECTED' ? 'red' : ''))}"
+                                      th:style="'width:' + ${busiestStage > 0 ? (entry.value * 100 / busiestStage) : 0} + '%'"></span>
+                            </span>
+                            <span class="bar-value" th:text="${entry.value}">0</span>
+                        </div>
+                        <p class="small muted">
+                            Applied is the entry stage. Shortlisted, Selected and Rejected are set by the
+                            placement coordinator after every round.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- --------------------------------------------- final offer list -->
+            <div class="card">
+                <div class="card-head">
+                    <h2>Confirmed offers</h2>
+                    <span class="hint">three table join, costliest package first</span>
+                </div>
+                <div class="card-body tight">
+                    <div class="table-wrap">
+                        <table class="data">
+                            <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Branch</th>
+                                <th>Company</th>
+                                <th>Role</th>
+                                <th class="num">Package</th>
+                                <th>Drive date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="offer : ${offers}">
+                                <td>
+                                    <a class="row-title" th:href="@{'/students/' + ${offer.student.id}}"
+                                       th:text="${offer.student.fullName}">student</a>
+                                    <div class="row-sub" th:text="${offer.student.rollNumber}">roll</div>
+                                </td>
+                                <td><span class="pill pill-plain"
+                                          th:text="${offer.student.department.code}">CSE</span></td>
+                                <td th:text="${offer.drive.company.name}">company</td>
+                                <td th:text="${offer.drive.jobRole}">role</td>
+                                <td class="num" th:text="${offer.drive.packageLpa} + ' LPA'">0</td>
+                                <td th:text="${offer.drive.driveDateDisplay}">date</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(offers)}">
+                                <td colspan="6" class="empty">No offer has been confirmed yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

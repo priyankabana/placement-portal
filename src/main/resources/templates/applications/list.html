@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Applications')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1>Applications</h1>
+                <p th:text="${#lists.size(applications)} + ' record(s) in view'">0</p>
+            </div>
+            <div class="topbar-actions" th:if="${session.user.staff}">
+                <a class="btn" th:href="@{/applications/new}">New application</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <div class="filter-bar">
+                    <div class="chip-row">
+                        <!-- each chip is only a link with a status parameter -->
+                        <a class="chip" th:classappend="${selectedStatus == null} ? 'on'"
+                           th:href="@{/applications}">All stages</a>
+                        <a class="chip" th:each="option : ${statusOptions}"
+                           th:classappend="${selectedStatus != null and selectedStatus == option} ? 'on'"
+                           th:href="@{/applications(status=${option})}"
+                           th:text="${option.label}">stage</a>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="data">
+                        <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Drive</th>
+                            <th>Applied on</th>
+                            <th>Stage and remark</th>
+                            <th class="actions-cell" th:if="${session.user.staff}">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="app : ${applications}">
+                            <td>
+                                <a class="row-title" th:href="@{'/students/' + ${app.student.id}}"
+                                   th:text="${app.student.fullName}">student</a>
+                                <div class="row-sub">
+                                    <span th:text="${app.student.rollNumber}">roll</span>
+                                    &middot;
+                                    <span th:text="${app.student.department.code}">CSE</span>
+                                    &middot;
+                                    <span th:text="${app.student.cgpa} + ' CGPA'">0</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a class="row-title" th:href="@{'/drives/' + ${app.drive.id}}"
+                                   th:text="${app.drive.company.name}">company</a>
+                                <div class="row-sub">
+                                    <span th:text="${app.drive.jobRole}">role</span>
+                                    &middot;
+                                    <span th:text="${app.drive.packageLpa} + ' LPA'">0</span>
+                                </div>
+                            </td>
+                            <td th:text="${app.appliedOnDisplay}">date</td>
+                            <td>
+                                <!-- the coordinator moves the stage and notes a remark from here -->
+                                <span class="pill" th:unless="${session.user.staff}"
+                                      th:classappend="'pill-' + ${app.status.name().toLowerCase()}"
+                                      th:text="${app.status.label}">stage</span>
+                                <div class="small muted" th:unless="${session.user.staff}"
+                                     th:text="${app.remarks} ?: '-'">remark</div>
+                                <form method="post" class="row-gap" th:if="${session.user.staff}"
+                                      th:action="@{'/applications/' + ${app.id} + '/status'}">
+                                    <select name="status" data-auto-submit>
+                                        <option th:each="option : ${statusOptions}"
+                                                th:value="${option}"
+                                                th:text="${option.label}"
+                                                th:selected="${option == application.status}">stage</option>
+                                    </select>
+                                    <input type="text" name="remarks" style="max-width:210px"
+                                           th:value="${app.remarks}" placeholder="Interview remark">
+                                    <button class="btn btn-ghost btn-sm" type="submit">Save</button>
+                                </form>
+                            </td>
+                            <td class="actions-cell" th:if="${session.user.staff}">
+                                <form class="inline-form" method="post"
+                                      th:action="@{'/applications/' + ${app.id} + '/delete'}"
+                                      th:data-confirm="'Withdraw the application of ' + ${app.student.fullName} + '?'">
+                                    <button class="btn btn-danger btn-sm" type="submit">Withdraw</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(applications)}">
+                            <td colspan="5" class="empty">No application in this stage.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Drive details')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1 th:text="${drive.company.name} + ' - ' + ${drive.jobRole}">Drive</h1>
+                <p>
+                    <span th:text="${drive.driveDateDisplay}">date</span>
+                    &nbsp;&middot;&nbsp;
+                    <span th:text="${drive.location} ?: 'Venue to be announced'">venue</span>
+                    &nbsp;&middot;&nbsp;
+                    <span class="pill" th:classappend="'pill-' + ${drive.status.name().toLowerCase()}"
+                          th:text="${drive.status.label}">status</span>
+                </p>
+            </div>
+            <div class="topbar-actions" th:if="${session.user.staff}">
+                <a class="btn btn-ghost" th:href="@{'/drives/' + ${drive.id} + '/edit'}">Edit drive</a>
+                <a class="btn" th:href="@{'/applications/new?driveId=' + ${drive.id}}">Add application</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Offer and eligibility</h2>
+                </div>
+                <div class="card-body">
+                    <div class="detail-list">
+                        <div class="detail-item">
+                            <div class="k">Package</div>
+                            <div class="v" th:text="${drive.packageLpa} + ' LPA'">0</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Minimum CGPA</div>
+                            <div class="v" th:text="${drive.minCgpa}">0</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Backlogs allowed</div>
+                            <div class="v" th:text="${drive.maxBacklogs}">0</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">HR contact</div>
+                            <div class="v" th:text="${drive.company.hrName}">hr</div>
+                        </div>
+                    </div>
+
+                    <p class="section-title">Selection process</p>
+                    <p th:text="${drive.description} ?: 'Process details are not filled in yet.'">description</p>
+                </div>
+            </div>
+
+            <div class="grid-halves" th:if="${session.user.staff}">
+                <!-- ---------------------------------------- who has applied -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Applications received</h2>
+                        <span class="hint" th:text="${#lists.size(applications)}">0</span>
+                    </div>
+                    <div class="card-body tight">
+                        <div class="table-wrap">
+                            <table class="data">
+                                <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th class="num">CGPA</th>
+                                    <th>Stage</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="app : ${applications}">
+                                    <td>
+                                        <a class="row-title" th:href="@{'/students/' + ${app.student.id}}"
+                                           th:text="${app.student.fullName}">student</a>
+                                        <div class="row-sub">
+                                            <span th:text="${app.student.rollNumber}">roll</span>
+                                            &middot;
+                                            <span th:text="${app.student.department.code}">CSE</span>
+                                        </div>
+                                    </td>
+                                    <td class="num" th:text="${app.student.cgpa}">0</td>
+                                    <td>
+                                        <span class="pill"
+                                              th:classappend="'pill-' + ${app.status.name().toLowerCase()}"
+                                              th:text="${app.status.label}">stage</span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(applications)}">
+                                    <td colspan="3" class="empty">Nobody has applied to this drive yet.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ------------------------------- eligible but not applied -->
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Eligible students</h2>
+                        <span class="hint">clear the cut off, not applied yet</span>
+                    </div>
+                    <div class="card-body tight">
+                        <div class="table-wrap">
+                            <table class="data">
+                                <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th class="num">CGPA</th>
+                                    <th class="actions-cell" th:if="${session.user.staff}">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="student : ${eligibleStudents}">
+                                    <td>
+                                        <a class="row-title" th:href="@{'/students/' + ${student.id}}"
+                                           th:text="${student.fullName}">student</a>
+                                        <div class="row-sub">
+                                            <span th:text="${student.rollNumber}">roll</span>
+                                            &middot;
+                                            <span th:text="${student.department.code}">CSE</span>
+                                        </div>
+                                    </td>
+                                    <td class="num" th:text="${student.cgpa}">0</td>
+                                    <td class="actions-cell" th:if="${session.user.staff}">
+                                        <a class="btn btn-ghost btn-sm"
+                                           th:href="@{'/applications/new?studentId=' + ${student.id} + '&driveId=' + ${drive.id}}">
+                                            Apply
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(eligibleStudents)}">
+                                    <td colspan="3" class="empty">
+                                        Every eligible student has already applied.
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- a student sees only their own action on this drive -->
+            <div class="card" th:unless="${session.user.staff}">
+                <div class="card-head"><h2>Apply to this drive</h2></div>
+                <div class="card-body">
+                    <p th:if="${drive.acceptingApplications}">
+                        This drive is open. Check the cut off above and apply from your profile page,
+                        where your eligibility is worked out for you.
+                    </p>
+                    <p th:unless="${drive.acceptingApplications}" class="muted">
+                        This drive is not accepting applications right now.
+                    </p>
+                    <a class="btn" th:href="@{/my-profile}">Go to my profile</a>
+                </div>
+            </div>
+
+            <div class="row-gap">
+                <a class="btn btn-ghost" th:href="@{/drives}">Back to drives</a>
+                <form class="inline-form" method="post" th:if="${session.user.staff}"
+                      th:action="@{'/drives/' + ${drive.id} + '/delete'}"
+                      th:data-confirm="'Delete this drive and its applications?'">
+                    <button class="btn btn-danger" type="submit">Delete drive</button>
+                </form>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

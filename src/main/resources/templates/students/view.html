@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Student profile')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1 th:text="${student.fullName}">Student name</h1>
+                <p>
+                    <span class="mono" th:text="${student.rollNumber}">roll</span>
+                    &nbsp;&middot;&nbsp;
+                    <span th:text="${student.department.name}">branch</span>
+                    &nbsp;&middot;&nbsp;
+                    <span th:text="'Batch of ' + ${student.batchYear}">batch</span>
+                </p>
+            </div>
+            <div class="topbar-actions" th:if="${session.user.staff}">
+                <a class="btn btn-ghost" th:href="@{'/applications/new?studentId=' + ${student.id}}">Apply to a drive</a>
+                <a class="btn" th:href="@{'/students/' + ${student.id} + '/edit'}">Edit</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Student details</h2>
+                    <span class="pill pill-selected" th:if="${student.placed}">Placed</span>
+                    <span class="pill pill-plain" th:unless="${student.placed}">Not placed yet</span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-list">
+                        <div class="detail-item">
+                            <div class="k">CGPA</div>
+                            <div class="v" th:text="${student.cgpa}">0</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Live backlogs</div>
+                            <div class="v" th:text="${student.backlogs}">0</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Email</div>
+                            <div class="v" th:text="${student.email}">email</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Mobile</div>
+                            <div class="v" th:text="${student.phone} ?: 'Not provided'">phone</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Branch head</div>
+                            <div class="v" th:text="${student.department.hodName}">hod</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="k">Resume</div>
+                            <div class="v">
+                                <span th:if="${student.resumeUrl == null or student.resumeUrl.isEmpty()}"
+                                      class="muted">Not uploaded</span>
+                                <span th:unless="${student.resumeUrl == null or student.resumeUrl.isEmpty()}"
+                                      th:text="${student.resumeUrl}">link</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- application history: one row per drive this student applied to -->
+            <div class="card">
+                <div class="card-head">
+                    <h2>Application history</h2>
+                    <span class="hint" th:text="${#lists.size(applications)} + ' application(s)'">0</span>
+                </div>
+                <div class="card-body tight">
+                    <div class="table-wrap">
+                        <table class="data">
+                            <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Role</th>
+                                <th>Drive date</th>
+                                <th class="num">Package</th>
+                                <th>Applied on</th>
+                                <th>Stage</th>
+                                <th>Remark</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="app : ${applications}">
+                                <td>
+                                    <a class="row-title" th:href="@{'/drives/' + ${app.drive.id}}"
+                                       th:text="${app.drive.company.name}">company</a>
+                                </td>
+                                <td th:text="${app.drive.jobRole}">role</td>
+                                <td th:text="${app.drive.driveDateDisplay}">date</td>
+                                <td class="num" th:text="${app.drive.packageLpa} + ' LPA'">0</td>
+                                <td th:text="${app.appliedOnDisplay}">date</td>
+                                <td>
+                                    <span class="pill"
+                                          th:classappend="'pill-' + ${app.status.name().toLowerCase()}"
+                                          th:text="${app.status.label}">stage</span>
+                                </td>
+                                <td class="small muted" th:text="${app.remarks} ?: '-'">remark</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(applications)}">
+                                <td colspan="7" class="empty">
+                                    This student has not applied to any drive so far.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-gap">
+                <a class="btn btn-ghost" th:href="@{/students}">Back to student list</a>
+                <form class="inline-form" method="post" th:if="${session.user.staff}"
+                      th:action="@{'/students/' + ${student.id} + '/delete'}"
+                      th:data-confirm="'Remove ' + ${student.fullName} + ' permanently?'">
+                    <button class="btn btn-danger" type="submit">Delete student</button>
+                </form>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

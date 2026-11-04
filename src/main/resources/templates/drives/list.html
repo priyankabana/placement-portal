@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Campus drives')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1>Campus drives</h1>
+                <p>Announce a drive, open it for applications and close it once the results are out</p>
+            </div>
+            <div class="topbar-actions" th:if="${session.user.staff}">
+                <a class="btn" th:href="@{/drives/new}">Announce drive</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>All drives</h2>
+                    <span class="hint">Newest drive date first</span>
+                </div>
+                <div class="card-body tight">
+                    <div class="table-wrap">
+                        <table class="data">
+                            <thead>
+                            <tr>
+                                <th>Company / role</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th class="num">Package</th>
+                                <th class="num">Eligibility</th>
+                                <th class="num">Applied</th>
+                                <th>Status</th>
+                                <th class="actions-cell" th:if="${session.user.staff}">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="drive : ${drives}">
+                                <td>
+                                    <a class="row-title" th:href="@{'/drives/' + ${drive.id}}"
+                                       th:text="${drive.company.name}">company</a>
+                                    <div class="row-sub" th:text="${drive.jobRole}">role</div>
+                                </td>
+                                <td th:text="${drive.driveDateDisplay}">date</td>
+                                <td th:text="${drive.location} ?: '-'">city</td>
+                                <td class="num" th:text="${drive.packageLpa} + ' LPA'">0</td>
+                                <td class="num">
+                                    <span th:text="${drive.minCgpa} + ' CGPA'">0</span>
+                                    <div class="row-sub" th:text="'max ' + ${drive.maxBacklogs} + ' backlog'">0</div>
+                                </td>
+                                <td class="num" th:text="${#lists.size(drive.applications)}">0</td>
+                                <td>
+                                    <!-- status can be switched right here, without opening the form -->
+                                    <span class="pill" th:unless="${session.user.staff}"
+                                          th:classappend="'pill-' + ${drive.status.name().toLowerCase()}"
+                                          th:text="${drive.status.label}">status</span>
+                                    <form class="inline-form" method="post" th:if="${session.user.staff}"
+                                          th:action="@{'/drives/' + ${drive.id} + '/status'}">
+                                        <select name="status" data-auto-submit>
+                                            <option th:each="option : ${statusOptions}"
+                                                    th:value="${option}"
+                                                    th:text="${option.label}"
+                                                    th:selected="${option == drive.status}">status</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td class="actions-cell" th:if="${session.user.staff}">
+                                    <a class="btn btn-ghost btn-sm" th:href="@{'/drives/' + ${drive.id}}">View</a>
+                                    <a class="btn btn-ghost btn-sm" th:href="@{'/drives/' + ${drive.id} + '/edit'}">Edit</a>
+                                    <form class="inline-form" method="post"
+                                          th:action="@{'/drives/' + ${drive.id} + '/delete'}"
+                                          th:data-confirm="'Delete the ' + ${drive.company.name} + ' drive and its applications?'">
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(drives)}">
+                                <td colspan="8" class="empty">No drive has been announced yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-box">
+                Only a drive in the <strong>Open</strong> state accepts new applications. The rule is
+                checked again in the service layer, so a closed drive cannot be filled even if the
+                form is submitted directly.
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

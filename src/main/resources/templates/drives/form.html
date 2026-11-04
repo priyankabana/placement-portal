@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Drive form')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1 th:text="${formTitle}">Drive form</h1>
+                <p>Eligibility written here is used to shortlist students automatically</p>
+            </div>
+            <div class="topbar-actions">
+                <a class="btn btn-ghost" th:href="@{/drives}">Back to list</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" th:action="@{/drives/save}" th:object="${drive}">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="company">Company *</label>
+                                <select id="company" name="company"
+                                        th:classappend="${#fields.hasErrors('company')} ? 'invalid'">
+                                    <option value="">Select company</option>
+                                    <option th:each="option : ${companies}"
+                                            th:value="${option.id}"
+                                            th:text="${option.name}"
+                                            th:selected="${drive.company != null and drive.company.id == option.id}">
+                                        company
+                                    </option>
+                                </select>
+                                <span class="field-error" th:if="${#fields.hasErrors('company')}"
+                                      th:errors="*{company}">error</span>
+                                <span class="note">Add the recruiter first if it is not in this list</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="jobRole">Job role *</label>
+                                <input type="text" id="jobRole" th:field="*{jobRole}"
+                                       th:classappend="${#fields.hasErrors('jobRole')} ? 'invalid'"
+                                       placeholder="Systems Engineer">
+                                <span class="field-error" th:if="${#fields.hasErrors('jobRole')}"
+                                      th:errors="*{jobRole}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="packageLpa">Package in LPA *</label>
+                                <input type="number" step="0.1" id="packageLpa" th:field="*{packageLpa}"
+                                       th:classappend="${#fields.hasErrors('packageLpa')} ? 'invalid'">
+                                <span class="field-error" th:if="${#fields.hasErrors('packageLpa')}"
+                                      th:errors="*{packageLpa}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="driveDate">Drive date *</label>
+                                <input type="date" id="driveDate" th:field="*{driveDate}"
+                                       th:classappend="${#fields.hasErrors('driveDate')} ? 'invalid'">
+                                <span class="field-error" th:if="${#fields.hasErrors('driveDate')}"
+                                      th:errors="*{driveDate}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="minCgpa">Minimum CGPA *</label>
+                                <input type="number" step="0.01" min="0" max="10" id="minCgpa" th:field="*{minCgpa}"
+                                       th:classappend="${#fields.hasErrors('minCgpa')} ? 'invalid'">
+                                <span class="field-error" th:if="${#fields.hasErrors('minCgpa')}"
+                                      th:errors="*{minCgpa}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="maxBacklogs">Backlogs allowed *</label>
+                                <input type="number" min="0" id="maxBacklogs" th:field="*{maxBacklogs}"
+                                       th:classappend="${#fields.hasErrors('maxBacklogs')} ? 'invalid'">
+                                <span class="field-error" th:if="${#fields.hasErrors('maxBacklogs')}"
+                                      th:errors="*{maxBacklogs}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="location">Venue</label>
+                                <input type="text" id="location" th:field="*{location}"
+                                       placeholder="Pune campus">
+                            </div>
+
+                            <div class="field">
+                                <label for="status">Status *</label>
+                                <select id="status" th:field="*{status}">
+                                    <option th:each="option : ${statusOptions}"
+                                            th:value="${option}"
+                                            th:text="${option.label}">status</option>
+                                </select>
+                                <span class="note">Applications are accepted only in the Open state</span>
+                            </div>
+
+                            <div class="field wide">
+                                <label for="description">Selection process</label>
+                                <textarea id="description" th:field="*{description}"
+                                          th:classappend="${#fields.hasErrors('description')} ? 'invalid'"
+                                          placeholder="Rounds, test pattern, bond details ..."></textarea>
+                                <span class="field-error" th:if="${#fields.hasErrors('description')}"
+                                      th:errors="*{description}">error</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Save drive</button>
+                            <a class="btn btn-ghost" th:href="@{/drives}">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>

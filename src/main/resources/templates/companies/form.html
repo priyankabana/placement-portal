@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Recruiter form')}"></head>
+<body>
+<div class="shell">
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <h1 th:text="${formTitle}">Recruiter form</h1>
+                <p>Company details are stored once and reused by every drive</p>
+            </div>
+            <div class="topbar-actions">
+                <a class="btn btn-ghost" th:href="@{/companies}">Back to list</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" th:action="@{/companies/save}" th:object="${company}">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="name">Company name *</label>
+                                <input type="text" id="name" th:field="*{name}"
+                                       th:classappend="${#fields.hasErrors('name')} ? 'invalid'">
+                                <span class="field-error" th:if="${#fields.hasErrors('name')}"
+                                      th:errors="*{name}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="industry">Industry *</label>
+                                <input type="text" id="industry" th:field="*{industry}"
+                                       th:classappend="${#fields.hasErrors('industry')} ? 'invalid'"
+                                       placeholder="IT Services, Automobile ...">
+                                <span class="field-error" th:if="${#fields.hasErrors('industry')}"
+                                      th:errors="*{industry}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="city">City</label>
+                                <input type="text" id="city" th:field="*{city}">
+                            </div>
+
+                            <div class="field">
+                                <label for="website">Website</label>
+                                <input type="text" id="website" th:field="*{website}"
+                                       placeholder="www.company.com">
+                            </div>
+
+                            <div class="field">
+                                <label for="hrName">HR contact person *</label>
+                                <input type="text" id="hrName" th:field="*{hrName}"
+                                       th:classappend="${#fields.hasErrors('hrName')} ? 'invalid'">
+                                <span class="field-error" th:if="${#fields.hasErrors('hrName')}"
+                                      th:errors="*{hrName}">error</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="hrEmail">HR email *</label>
+                                <input type="email" id="hrEmail" th:field="*{hrEmail}"
+                                       th:classappend="${#fields.hasErrors('hrEmail')} ? 'invalid'">
+                                <span class="field-error" th:if="${#fields.hasErrors('hrEmail')}"
+                                      th:errors="*{hrEmail}">error</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn" type="submit">Save recruiter</button>
+                            <a class="btn btn-ghost" th:href="@{/companies}">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="~{fragments/layout :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>
