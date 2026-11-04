@@ -62,6 +62,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- /actuator/health, used by the container platform as a health check -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- BCrypt password hashing only (no Spring Security filter chain) -->
         <dependency>
             <groupId>org.springframework.security</groupId>
