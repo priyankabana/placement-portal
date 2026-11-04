@@ -1,0 +1,25 @@
+# Render Blueprint: New > Blueprint > pick this repository.
+# One free web service built from the Dockerfile. It uses the H2 in memory
+# database, so no database has to be created first.
+services:
+  - type: web
+    name: placement-portal
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    autoDeploy: true
+    envVars:
+      # h2   = in memory sample data, reset on every restart
+      # prod = H2 console off, no SQL logging, cached templates
+      - key: SPRING_PROFILES_ACTIVE
+        value: h2,prod
+      # To use a managed MySQL instead, change the line above to mysql,prod
+      # and add these three in the Render dashboard (never commit the values;
+      # see .env.example):
+      # - key: DB_URL
+      #   sync: false
+      # - key: DB_USERNAME
+      #   sync: false
+      # - key: DB_PASSWORD
+      #   sync: false
