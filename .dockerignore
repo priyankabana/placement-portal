@@ -1,0 +1,11 @@
+target/
+bin/
+.git/
+.github/
+.idea/
+.vscode/
+*.iml
+*.zip
+docs/
+*.md
+.DS_Store
