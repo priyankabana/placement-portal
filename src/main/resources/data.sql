@@ -44,26 +44,26 @@ INSERT INTO staff (id, name, username, password, designation, email, role, depar
 -- --------------------------- students ---------------------------
 -- passwords are BCrypt hashes; the plain demo passwords are listed in docs/login-credentials.txt
 INSERT INTO student (id, roll_number, first_name, last_name, email, phone, cgpa, batch_year, backlogs, resume_url, password, department_id) VALUES
- (1,  'CS22001', 'Aditi',      'Kulkarni',  'aditi.kulkarni@campus.edu.in',      '9822011001', 8.6, 2026, 0, 'drive.campus.edu.in/cs22001', '$2a$10$cmPZE.GSI.qjBishYrO3vOh85vX75etSis31v6okXQCmD5ddC9C4K', 1),
- (2,  'CS22002', 'Rohan',      'Deshpande', 'rohan.deshpande@campus.edu.in',     '9822011002', 7.9, 2026, 0, 'drive.campus.edu.in/cs22002', '$2a$10$ZsJnECdyZqqvpjXk1b7e6eEv5pOLjpnUNRdpMtpeq2wv1HEyoG7OG', 1),
- (3,  'CS22003', 'Sneha',      'Patil',     'sneha.patil@campus.edu.in',         '9822011003', 9.1, 2026, 0, 'drive.campus.edu.in/cs22003', '$2a$10$KW3WNO.Z.RXCIT/BpGeW1On3XXTD5ZSUNcRRvfpI7oNGrL9S14nsi', 1),
- (4,  'CS22004', 'Karan',      'Mehta',     'karan.mehta@campus.edu.in',         '9822011004', 6.8, 2026, 1, NULL, '$2a$10$OmebS8FqTuYRu8v/Yu3fQ.G9F2lW9ALGu1ZfSkLGBruV5f4YYUc4K', 1),
- (5,  'CS22005', 'Priyanka',   'Bansode',   'priyanka.bansode@campus.edu.in',    '9822011005', 8.2, 2026, 0, 'drive.campus.edu.in/cs22005', '$2a$10$tCVOahy0KpdLcr9KXLuCx.derikrdsLV6/XXorC1fd5aIAJlfKeaa', 1),
- (6,  'CS22006', 'Vishal',     'Chavan',    'vishal.chavan@campus.edu.in',       '9822011006', 6.2, 2026, 2, NULL, '$2a$10$vSfksUXZOTLHbYEdBXv4ZuIT1RHermMc1ES4JXpO.N/rmrdYB/72a', 1),
- (7,  'IT22001', 'Neha',       'Joshi',     'neha.joshi@campus.edu.in',          '9822012001', 8.8, 2026, 0, 'drive.campus.edu.in/it22001', '$2a$10$JUdL43KLDgKLo.Q/wilPQ.Taekxsvdy31t5R7atrMEXBeL6sYI4Ma', 2),
- (8,  'IT22002', 'Sahil',      'Kapoor',    'sahil.kapoor@campus.edu.in',        '9822012002', 7.4, 2026, 0, 'drive.campus.edu.in/it22002', '$2a$10$x.ywoCGXtgzX37boqlk/6.CzaFPqBU7xBRVP6nraMboO7jqep0AWq', 2),
- (9,  'IT22003', 'Ritika',     'Shah',      'ritika.shah@campus.edu.in',         '9822012003', 6.9, 2026, 1, NULL, '$2a$10$2JIwXCxsBWixRMnr18qaSuc4BH9ruPaQlM2N.qhSLqY3Ak9MsSf4G', 2),
- (10, 'IT22004', 'Amit',       'Bhosale',   'amit.bhosale@campus.edu.in',        '9822012004', 7.7, 2026, 0, 'drive.campus.edu.in/it22004', '$2a$10$NCQ2bvPxR8gNVOvBz7/HcORPOJ5v7SDiToMSiINyqWyXkBf4oh3v6', 2),
- (11, 'IT22005', 'Tanvi',      'Rane',      'tanvi.rane@campus.edu.in',          '9822012005', 9.3, 2026, 0, 'drive.campus.edu.in/it22005', '$2a$10$Ha/C2HQN.qn7DeSHZIbu0.LTcKCtE.HhZdi5FuRbwbkPMrS0JPjuu', 2),
- (12, 'EC22001', 'Manish',     'Gupta',     'manish.gupta@campus.edu.in',        '9822013001', 7.1, 2026, 0, NULL, '$2a$10$IlarqmlT8kaFUUfmukHjEerqjanDdQD7D8gxcLd0Gm1OwbOujodBe', 3),
- (13, 'EC22002', 'Pooja',      'Nair',      'pooja.nair@campus.edu.in',          '9822013002', 8.0, 2026, 0, 'drive.campus.edu.in/ec22002', '$2a$10$ZsWL1NMab0/tp1oDZ3KZ2uQxVBXUrFIdTHhkAswxQ1PsqtkLYX.ZS', 3),
- (14, 'EC22003', 'Siddharth',  'Salunkhe',  'siddharth.salunkhe@campus.edu.in',  '9822013003', 6.5, 2026, 1, NULL, '$2a$10$.m775ioiWy8ofRKERU8qUeOY5oXvgLMQgf8/L3.9ueye1.Z6LoRMy', 3),
- (15, 'EC22004', 'Ankita',     'Pandit',    'ankita.pandit@campus.edu.in',       '9822013004', 7.6, 2026, 0, 'drive.campus.edu.in/ec22004', '$2a$10$dZiVwgHOpv0DaOaCCWK53eHvLr09nWF5Wwzd1ZMLxXfJM3gyTIduO', 3),
- (16, 'ME22001', 'Ganesh',     'Shinde',    'ganesh.shinde@campus.edu.in',       '9822014001', 7.2, 2026, 0, NULL, '$2a$10$J6KHZllPn3/OQClZIFAOXuy8ZXErJC19.kbgcJCKd3rKw68a8GWJC', 4),
- (17, 'ME22002', 'Rahul',      'Wagh',      'rahul.wagh@campus.edu.in',          '9822014002', 6.4, 2026, 1, NULL, '$2a$10$dFGSOpbjPl67sKKx4Tr0FuFouku1GQYNsU0xxFfks0iE0v0LGWuYO', 4),
- (18, 'ME22003', 'Snehal',     'Kadam',     'snehal.kadam@campus.edu.in',        '9822014003', 8.1, 2026, 0, 'drive.campus.edu.in/me22003', '$2a$10$0UnXlJkjvISP8WyIJl/p9.QU32yefaKa3CzG2o2vkQ59XgLHMZuDS', 4),
- (19, 'CE22001', 'Akash',      'Bhoir',     'akash.bhoir@campus.edu.in',         '9822015001', 6.7, 2026, 0, NULL, '$2a$10$cKFpdCiD1YHON1ZGJBjHUuYn/gn.pY/4WVrwbv6qI1ZXPyjqZBxj6', 5),
- (20, 'CE22002', 'Vaishnavi',  'More',      'vaishnavi.more@campus.edu.in',      '9822015002', 7.8, 2026, 0, 'drive.campus.edu.in/ce22002', '$2a$10$WtS1amr6Xigpq02bdWQt7uKpnxFsMN.Blqgks5tSbR/Wjon2UKjbW', 5);
+ (1,  'CS22001', 'Aditi',      'Kulkarni',  'aditi.kulkarni@campus.edu.in',      '9000011001', 8.6, 2026, 0, 'drive.campus.edu.in/cs22001', '$2a$10$cmPZE.GSI.qjBishYrO3vOh85vX75etSis31v6okXQCmD5ddC9C4K', 1),
+ (2,  'CS22002', 'Rohan',      'Deshpande', 'rohan.deshpande@campus.edu.in',     '9000011002', 7.9, 2026, 0, 'drive.campus.edu.in/cs22002', '$2a$10$ZsJnECdyZqqvpjXk1b7e6eEv5pOLjpnUNRdpMtpeq2wv1HEyoG7OG', 1),
+ (3,  'CS22003', 'Sneha',      'Patil',     'sneha.patil@campus.edu.in',         '9000011003', 9.1, 2026, 0, 'drive.campus.edu.in/cs22003', '$2a$10$KW3WNO.Z.RXCIT/BpGeW1On3XXTD5ZSUNcRRvfpI7oNGrL9S14nsi', 1),
+ (4,  'CS22004', 'Karan',      'Mehta',     'karan.mehta@campus.edu.in',         '9000011004', 6.8, 2026, 1, NULL, '$2a$10$OmebS8FqTuYRu8v/Yu3fQ.G9F2lW9ALGu1ZfSkLGBruV5f4YYUc4K', 1),
+ (5,  'CS22005', 'Priyanka',   'Bansode',   'priyanka.bansode@campus.edu.in',    '9000011005', 8.2, 2026, 0, 'drive.campus.edu.in/cs22005', '$2a$10$tCVOahy0KpdLcr9KXLuCx.derikrdsLV6/XXorC1fd5aIAJlfKeaa', 1),
+ (6,  'CS22006', 'Vishal',     'Chavan',    'vishal.chavan@campus.edu.in',       '9000011006', 6.2, 2026, 2, NULL, '$2a$10$vSfksUXZOTLHbYEdBXv4ZuIT1RHermMc1ES4JXpO.N/rmrdYB/72a', 1),
+ (7,  'IT22001', 'Neha',       'Joshi',     'neha.joshi@campus.edu.in',          '9000012001', 8.8, 2026, 0, 'drive.campus.edu.in/it22001', '$2a$10$JUdL43KLDgKLo.Q/wilPQ.Taekxsvdy31t5R7atrMEXBeL6sYI4Ma', 2),
+ (8,  'IT22002', 'Sahil',      'Kapoor',    'sahil.kapoor@campus.edu.in',        '9000012002', 7.4, 2026, 0, 'drive.campus.edu.in/it22002', '$2a$10$x.ywoCGXtgzX37boqlk/6.CzaFPqBU7xBRVP6nraMboO7jqep0AWq', 2),
+ (9,  'IT22003', 'Ritika',     'Shah',      'ritika.shah@campus.edu.in',         '9000012003', 6.9, 2026, 1, NULL, '$2a$10$2JIwXCxsBWixRMnr18qaSuc4BH9ruPaQlM2N.qhSLqY3Ak9MsSf4G', 2),
+ (10, 'IT22004', 'Amit',       'Bhosale',   'amit.bhosale@campus.edu.in',        '9000012004', 7.7, 2026, 0, 'drive.campus.edu.in/it22004', '$2a$10$NCQ2bvPxR8gNVOvBz7/HcORPOJ5v7SDiToMSiINyqWyXkBf4oh3v6', 2),
+ (11, 'IT22005', 'Tanvi',      'Rane',      'tanvi.rane@campus.edu.in',          '9000012005', 9.3, 2026, 0, 'drive.campus.edu.in/it22005', '$2a$10$Ha/C2HQN.qn7DeSHZIbu0.LTcKCtE.HhZdi5FuRbwbkPMrS0JPjuu', 2),
+ (12, 'EC22001', 'Manish',     'Gupta',     'manish.gupta@campus.edu.in',        '9000013001', 7.1, 2026, 0, NULL, '$2a$10$IlarqmlT8kaFUUfmukHjEerqjanDdQD7D8gxcLd0Gm1OwbOujodBe', 3),
+ (13, 'EC22002', 'Pooja',      'Nair',      'pooja.nair@campus.edu.in',          '9000013002', 8.0, 2026, 0, 'drive.campus.edu.in/ec22002', '$2a$10$ZsWL1NMab0/tp1oDZ3KZ2uQxVBXUrFIdTHhkAswxQ1PsqtkLYX.ZS', 3),
+ (14, 'EC22003', 'Siddharth',  'Salunkhe',  'siddharth.salunkhe@campus.edu.in',  '9000013003', 6.5, 2026, 1, NULL, '$2a$10$.m775ioiWy8ofRKERU8qUeOY5oXvgLMQgf8/L3.9ueye1.Z6LoRMy', 3),
+ (15, 'EC22004', 'Ankita',     'Pandit',    'ankita.pandit@campus.edu.in',       '9000013004', 7.6, 2026, 0, 'drive.campus.edu.in/ec22004', '$2a$10$dZiVwgHOpv0DaOaCCWK53eHvLr09nWF5Wwzd1ZMLxXfJM3gyTIduO', 3),
+ (16, 'ME22001', 'Ganesh',     'Shinde',    'ganesh.shinde@campus.edu.in',       '9000014001', 7.2, 2026, 0, NULL, '$2a$10$J6KHZllPn3/OQClZIFAOXuy8ZXErJC19.kbgcJCKd3rKw68a8GWJC', 4),
+ (17, 'ME22002', 'Rahul',      'Wagh',      'rahul.wagh@campus.edu.in',          '9000014002', 6.4, 2026, 1, NULL, '$2a$10$dFGSOpbjPl67sKKx4Tr0FuFouku1GQYNsU0xxFfks0iE0v0LGWuYO', 4),
+ (18, 'ME22003', 'Snehal',     'Kadam',     'snehal.kadam@campus.edu.in',        '9000014003', 8.1, 2026, 0, 'drive.campus.edu.in/me22003', '$2a$10$0UnXlJkjvISP8WyIJl/p9.QU32yefaKa3CzG2o2vkQ59XgLHMZuDS', 4),
+ (19, 'CE22001', 'Akash',      'Bhoir',     'akash.bhoir@campus.edu.in',         '9000015001', 6.7, 2026, 0, NULL, '$2a$10$cKFpdCiD1YHON1ZGJBjHUuYn/gn.pY/4WVrwbv6qI1ZXPyjqZBxj6', 5),
+ (20, 'CE22002', 'Vaishnavi',  'More',      'vaishnavi.more@campus.edu.in',      '9000015002', 7.8, 2026, 0, 'drive.campus.edu.in/ce22002', '$2a$10$WtS1amr6Xigpq02bdWQt7uKpnxFsMN.Blqgks5tSbR/Wjon2UKjbW', 5);
 
 -- ---------------------------- drives ----------------------------
 INSERT INTO drive (id, company_id, job_role, package_lpa, min_cgpa, max_backlogs, drive_date, location, status, description) VALUES
